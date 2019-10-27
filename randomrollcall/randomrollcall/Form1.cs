@@ -16,6 +16,7 @@ namespace randomrollcall
     {
         List<string> pathlist = new List<string>();
         string name;
+        string imgpath;
         public Form1()
         {
             InitializeComponent();
@@ -37,12 +38,7 @@ namespace randomrollcall
         
 
         private void Form1_Load(object sender, EventArgs e)
-        {
-            string img1 = "D:/workspace/randomrollcall/face/john.png";
-            string img2 = "D:/workspace/randomrollcall/face/zmy.png";
-            string[] files;
-            files = Directory.GetFiles("D:/workspace/randomrollcall/face");
-            pathlist = files.ToList();
+        {     
 
         }
         private void timer1_Tick(object sender, EventArgs e)
@@ -50,8 +46,23 @@ namespace randomrollcall
             Random rd = new Random();
             int a = rd.Next(0, pathlist.Count());
             this.pictureBox1.Image = Image.FromFile(pathlist[a]);
-            name = pathlist[a].Split('\\')[1].Split('.')[0];
+            int index = pathlist[a].LastIndexOf('\\');
+            name = pathlist[a].Substring(index+1).Split('.')[0];
         }
 
+        private void button3_Click(object sender, EventArgs e)
+        {
+            FolderBrowserDialog dialog = new FolderBrowserDialog();
+            dialog.Description = "请选择存储点名人群照片的路径， 照片命名为用户名。";
+
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                imgpath = dialog.SelectedPath;
+                this.textBox2.Text = imgpath;
+                string[] files;
+                files = Directory.GetFiles(imgpath);
+                pathlist = files.ToList();
+            }
+        }
     }
 }
